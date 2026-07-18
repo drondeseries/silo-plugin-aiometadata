@@ -1,0 +1,75 @@
+{
+  "pluginId": "aiometadata",
+  "version": "0.1.0",
+  "checksum": "",
+  "siloApiVersion": "v1",
+  "supportedPlatforms": [
+    {
+      "os": "linux",
+      "arch": "amd64"
+    },
+    {
+      "os": "linux",
+      "arch": "arm64"
+    }
+  ],
+  "capabilities": [
+    {
+      "type": "metadata_provider.v1",
+      "id": "aiometadata",
+      "displayName": "AIOMetadata",
+      "description": "Movie and series metadata, artwork, and search from a configured AIOMetadata Stremio addon.",
+      "metadata": {
+        "content_types": [
+          "movie",
+          "series"
+        ],
+        "supports_search": true
+      }
+    }
+  ],
+  "globalConfigSchema": [
+    {
+      "key": "aiometadata_config",
+      "jsonSchema": "{\"type\":\"object\",\"properties\":{\"addon_url\":{\"type\":\"string\",\"title\":\"AIOMetadata addon URL\"},\"api_key\":{\"type\":\"string\",\"title\":\"Optional API credential\"},\"timeout_seconds\":{\"type\":\"number\",\"minimum\":1,\"maximum\":120,\"default\":20}},\"required\":[\"addon_url\"]}",
+      "adminForm": {
+        "fields": [
+          {
+            "key": "addon_url",
+            "label": "Addon URL",
+            "control": "ADMIN_FORM_CONTROL_PASSWORD",
+            "secret": true,
+            "description": "The complete AIOMetadata install or manifest URL.",
+            "placeholder": "https://host/stremio/<user>/<config>/manifest.json"
+          },
+          {
+            "key": "api_key",
+            "label": "API credential",
+            "control": "ADMIN_FORM_CONTROL_PASSWORD",
+            "secret": true,
+            "description": "Optional bearer token, API key, or username:password."
+          },
+          {
+            "key": "timeout_seconds",
+            "label": "Request timeout (seconds)",
+            "control": "ADMIN_FORM_CONTROL_NUMBER",
+            "placeholder": "20"
+          }
+        ]
+      }
+    }
+  ],
+  "presentation": {
+    "displayName": "AIOMetadata Provider",
+    "summary": "Use AIOMetadata as a standalone Silo metadata provider.",
+    "descriptionMarkdown": "Connects Silo to an existing AIOMetadata configuration. Supports movie and series search, full metadata, people, ratings, and artwork.",
+    "setupMarkdown": "First configure AIOMetadata and copy its complete Stremio addon URL (ending in manifest.json is accepted). In Silo, install this plugin, open its settings, paste that URL into Addon URL, optionally enter an API credential, save, then enable AIOMetadata for the desired movie and series libraries. Full instructions and troubleshooting are in the project README.",
+    "homepageUrl": "https://github.com/drondeseries/silo-plugin-aiometadata",
+    "sourceUrl": "https://github.com/drondeseries/silo-plugin-aiometadata",
+    "supportUrl": "https://github.com/drondeseries/silo-plugin-aiometadata/issues",
+    "changelogUrl": "https://github.com/drondeseries/silo-plugin-aiometadata/releases",
+    "publisherName": "drondeseries",
+    "publisherUrl": "https://github.com/drondeseries",
+    "licenseSpdx": "NOASSERTION"
+  }
+}
