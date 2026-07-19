@@ -3,7 +3,7 @@
     {
       "manifest": {
         "plugin_id": "aiometadata",
-        "version": "0.1.1",
+        "version": "0.1.3",
         "silo_api_version": "v1",
         "supported_platforms": [
           {
@@ -76,13 +76,13 @@
         }
       },
       "repo_url": "https://github.com/drondeseries/silo-plugin-aiometadata",
-      "checksums_url": "https://github.com/drondeseries/silo-plugin-aiometadata/releases/download/v0.1.1/checksums.txt",
+      "checksums_url": "https://github.com/drondeseries/silo-plugin-aiometadata/releases/download/v0.1.3/checksums.txt",
       "binaries": {
         "linux/amd64": {
-          "url": "https://github.com/drondeseries/silo-plugin-aiometadata/releases/download/v0.1.1/plugin-linux-amd64"
+          "url": "https://github.com/drondeseries/silo-plugin-aiometadata/releases/download/v0.1.3/plugin-linux-amd64"
         },
         "linux/arm64": {
-          "url": "https://github.com/drondeseries/silo-plugin-aiometadata/releases/download/v0.1.1/plugin-linux-arm64"
+          "url": "https://github.com/drondeseries/silo-plugin-aiometadata/releases/download/v0.1.3/plugin-linux-arm64"
         }
       }
     }
