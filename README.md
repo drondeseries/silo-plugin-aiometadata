@@ -4,7 +4,7 @@ Standalone Silo `metadata_provider.v1` plugin backed by an existing [AIOMetadata
 
 ## What it does
 
-The plugin translates AIOMetadata Stremio API into Silo native metadata-provider protocol. It supports movie and series search, titles, descriptions, dates, runtime, genres, IMDb ratings, external IDs, credits, posters, backdrops, and logos.
+The plugin translates AIOMetadata Stremio API into Silo native metadata-provider protocol. It supports movie and series search, titles, descriptions, dates, runtime, genres, IMDb ratings, external IDs, credits, posters, backdrops, and logos. AIOMetadata poster, backdrop, and logo choices are exposed in Silo Edit Metadata image picker.
 
 It does not host AIOMetadata. You need a working AIOMetadata instance and saved configuration first.
 

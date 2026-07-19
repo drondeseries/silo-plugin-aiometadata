@@ -233,6 +233,32 @@ func (p *Plugin) GetMetadata(ctx context.Context, req *pluginv1.GetMetadataReque
 	return &pluginv1.GetMetadataResponse{Item: toItem(env.Meta, req.GetItemType())}, nil
 }
 
+func (p *Plugin) GetImages(ctx context.Context, req *pluginv1.GetImagesRequest) (*pluginv1.GetImagesResponse, error) {
+	base, err := p.configured()
+	if err != nil {
+		return nil, err
+	}
+	typ := stremioType(req.GetItemType())
+	if typ == "" || req.GetProviderId() == "" {
+		return &pluginv1.GetImagesResponse{}, nil
+	}
+	endpoint := base + "/meta/" + url.PathEscape(typ) + "/" + url.PathEscape(req.GetProviderId()) + ".json"
+	var env metaEnvelope
+	if err := p.getJSON(ctx, endpoint, &env); err != nil {
+		return nil, err
+	}
+	images := make([]*pluginv1.ImageRecord, 0, 3)
+	add := func(kind, imageURL string) {
+		if strings.TrimSpace(imageURL) != "" {
+			images = append(images, &pluginv1.ImageRecord{Kind: kind, Url: imageURL, Language: req.GetLanguage()})
+		}
+	}
+	add("poster", env.Meta.Poster)
+	add("backdrop", env.Meta.Background)
+	add("logo", env.Meta.Logo)
+	return &pluginv1.GetImagesResponse{Images: images}, nil
+}
+
 func toItem(m stremioMeta, itemType string) *pluginv1.MetadataItem {
 	ids, _ := structpb.NewStruct(idsFor(m.ID))
 	ratings := map[string]any{}

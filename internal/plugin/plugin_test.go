@@ -31,7 +31,7 @@ func TestSearchAndMetadata(t *testing.T) {
 		case "/catalog/movie/search/search=Alien.json":
 			w.Write([]byte(`{"metas":[{"id":"tt0078748","type":"movie","name":"Alien","releaseInfo":"1979","poster":"https://img/poster.jpg"}]}`))
 		case "/meta/movie/tt0078748.json":
-			w.Write([]byte(`{"meta":{"id":"tt0078748","type":"movie","name":"Alien","description":"In space...","releaseInfo":"1979","released":"1979-05-25T00:00:00.000Z","runtime":"117 min","genres":["Horror"],"imdbRating":"8.5","director":["Ridley Scott"]}}`))
+			w.Write([]byte(`{"meta":{"id":"tt0078748","type":"movie","name":"Alien","description":"In space...","releaseInfo":"1979","released":"1979-05-25T00:00:00.000Z","runtime":"117 min","genres":["Horror"],"imdbRating":"8.5","director":["Ridley Scott"],"poster":"https://img/poster.jpg","background":"https://img/backdrop.jpg","logo":"https://img/logo.png"}}`))
 		default:
 			http.NotFound(w, r)
 		}
@@ -43,6 +43,10 @@ func TestSearchAndMetadata(t *testing.T) {
 	g, err := p.GetMetadata(context.Background(), &pluginv1.GetMetadataRequest{ProviderId: "tt0078748", ItemType: "movie"})
 	if err != nil || g.GetItem().GetRuntime() != 117 || g.GetItem().GetProviderIds().GetFields()["imdb"].GetStringValue() != "tt0078748" {
 		t.Fatalf("metadata=%+v err=%v", g, err)
+	}
+	images, err := p.GetImages(context.Background(), &pluginv1.GetImagesRequest{ProviderId: "tt0078748", ItemType: "movie", Language: "en"})
+	if err != nil || len(images.GetImages()) != 3 || images.GetImages()[0].GetKind() != "poster" || images.GetImages()[0].GetUrl() != "https://img/poster.jpg" {
+		t.Fatalf("images=%+v err=%v", images, err)
 	}
 }
 func TestNormalizeURL(t *testing.T) {
