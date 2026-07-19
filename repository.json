@@ -3,7 +3,7 @@
     {
       "manifest": {
         "plugin_id": "aiometadata",
-        "version": "0.1.2",
+        "version": "0.1.1",
         "silo_api_version": "v1",
         "supported_platforms": [
           {
@@ -33,7 +33,7 @@
         "global_config_schema": [
           {
             "key": "aiometadata_config",
-            "json_schema": "{\"type\":\"object\",\"properties\":{\"addon_url\":{\"type\":\"string\",\"title\":\"AIOMetadata addon URL\"},\"api_key\":{\"type\":\"string\",\"title\":\"Optional API credential\"},\"timeout_seconds\":{\"type\":\"number\",\"minimum\":1,\"maximum\":120,\"default\":20},\"enable_rt_ratings\":{\"type\":\"boolean\",\"title\":\"Rotten Tomatoes ratings\",\"default\":true},\"rt_endpoint\":{\"type\":\"string\",\"title\":\"Rotten Tomatoes search endpoint\",\"default\":\"https://79frdp12pn-dsn.algolia.net/1/indexes/*/queries\"},\"rt_app_id\":{\"type\":\"string\",\"title\":\"Algolia application ID\",\"default\":\"79FRDP12PN\"},\"rt_api_key\":{\"type\":\"string\",\"title\":\"Algolia search-only key\"}},\"required\":[\"addon_url\"]}",
+            "json_schema": "{\"type\":\"object\",\"properties\":{\"addon_url\":{\"type\":\"string\",\"title\":\"AIOMetadata addon URL\"},\"api_key\":{\"type\":\"string\",\"title\":\"Optional API credential\"},\"timeout_seconds\":{\"type\":\"number\",\"minimum\":1,\"maximum\":120,\"default\":20}},\"required\":[\"addon_url\"]}",
             "admin_form": {
               "fields": [
                 {
@@ -56,33 +56,6 @@
                   "label": "Request timeout (seconds)",
                   "control": 4,
                   "placeholder": "20"
-                },
-                {
-                  "key": "enable_rt_ratings",
-                  "label": "Rotten Tomatoes ratings",
-                  "control": 5,
-                  "description": "Best-effort critic and audience scores; failures never block AIOMetadata."
-                },
-                {
-                  "key": "rt_endpoint",
-                  "label": "RT search endpoint",
-                  "control": 1,
-                  "description": "Advanced: Rotten Tomatoes Algolia endpoint.",
-                  "placeholder": "https://79frdp12pn-dsn.algolia.net/1/indexes/*/queries"
-                },
-                {
-                  "key": "rt_app_id",
-                  "label": "RT Algolia application ID",
-                  "control": 1,
-                  "description": "Advanced: public Algolia application ID.",
-                  "placeholder": "79FRDP12PN"
-                },
-                {
-                  "key": "rt_api_key",
-                  "label": "RT Algolia search key",
-                  "control": 3,
-                  "secret": true,
-                  "description": "Advanced: public search-only key; override if Rotten Tomatoes rotates it."
                 }
               ]
             }
@@ -103,13 +76,13 @@
         }
       },
       "repo_url": "https://github.com/drondeseries/silo-plugin-aiometadata",
-      "checksums_url": "https://github.com/drondeseries/silo-plugin-aiometadata/releases/download/v0.1.2/checksums.txt",
+      "checksums_url": "https://github.com/drondeseries/silo-plugin-aiometadata/releases/download/v0.1.1/checksums.txt",
       "binaries": {
         "linux/amd64": {
-          "url": "https://github.com/drondeseries/silo-plugin-aiometadata/releases/download/v0.1.2/plugin-linux-amd64"
+          "url": "https://github.com/drondeseries/silo-plugin-aiometadata/releases/download/v0.1.1/plugin-linux-amd64"
         },
         "linux/arm64": {
-          "url": "https://github.com/drondeseries/silo-plugin-aiometadata/releases/download/v0.1.2/plugin-linux-arm64"
+          "url": "https://github.com/drondeseries/silo-plugin-aiometadata/releases/download/v0.1.1/plugin-linux-arm64"
         }
       }
     }

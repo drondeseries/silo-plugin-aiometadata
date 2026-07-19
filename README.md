@@ -64,10 +64,6 @@ Search is manifest-driven: every matching searchable catalog is queried, results
 - **Timeouts**: verify Silo can reach AIOMetadata and increase the timeout.
 - **Missing fields/artwork**: results depend on AIOMetadata provider keys, language, and artwork preferences.
 
-## Rotten Tomatoes ratings
-
-The plugin can enrich full metadata lookups with Rotten Tomatoes critic and audience percentages. This uses Rotten Tomatoes public browser search through Algolia, matches exact normalized title, media type, and release year (plus-or-minus one year for series), caches results, and never blocks normal metadata on failure. The feature is enabled by default and can be disabled or pointed at rotated public search credentials in advanced plugin settings. Because this is an undocumented endpoint, availability is not guaranteed.
-
 ## Updates
 
 Refresh the Silo plugin catalog when a new release is published, then use Silo plugin update flow. Releases contain static Linux amd64 and arm64 binaries plus `checksums.txt`.
