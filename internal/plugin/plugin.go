@@ -24,18 +24,22 @@ const userAgent = "silo-plugin-aiometadata/0.1"
 type Plugin struct {
 	runtimedefault.Server
 	pluginv1.UnimplementedMetadataProviderServer
-	logger              hclog.Logger
-	client              *http.Client
-	mu                  sync.RWMutex
-	manifest            *pluginv1.PluginManifest
-	baseURL, credential string
+	logger                        hclog.Logger
+	client                        *http.Client
+	mu                            sync.RWMutex
+	manifest                      *pluginv1.PluginManifest
+	baseURL, credential           string
+	rtEndpoint, rtAppID, rtAPIKey string
+	rtEnabled                     bool
+	rtMu                          sync.Mutex
+	rtCache                       map[string]rtCacheEntry
 }
 
 func New(logger hclog.Logger, client *http.Client) *Plugin {
 	if client == nil {
 		client = &http.Client{Timeout: 20 * time.Second}
 	}
-	return &Plugin{logger: logger, client: client}
+	return &Plugin{logger: logger, client: client, rtEndpoint: defaultRTEndpoint, rtAppID: defaultRTAppID, rtAPIKey: defaultRTAPIKey, rtCache: make(map[string]rtCacheEntry), rtEnabled: true}
 }
 func (p *Plugin) SetManifest(m *pluginv1.PluginManifest) { p.manifest = m }
 func (p *Plugin) GetManifest(context.Context, *pluginv1.GetManifestRequest) (*pluginv1.GetManifestResponse, error) {
@@ -63,6 +67,25 @@ func (p *Plugin) Configure(_ context.Context, req *pluginv1.ConfigureRequest) (*
 	p.baseURL = base
 	p.credential = strings.TrimSpace(credential)
 	p.client.Timeout = time.Duration(timeout) * time.Second
+	p.rtEndpoint, p.rtAppID, p.rtAPIKey, p.rtEnabled = defaultRTEndpoint, defaultRTAppID, defaultRTAPIKey, true
+	for _, e := range req.GetConfig() {
+		if e.GetKey() != "aiometadata_config" {
+			continue
+		}
+		f := e.GetValue().GetFields()
+		if v := strings.TrimSpace(f["rt_endpoint"].GetStringValue()); v != "" {
+			p.rtEndpoint = v
+		}
+		if v := strings.TrimSpace(f["rt_app_id"].GetStringValue()); v != "" {
+			p.rtAppID = v
+		}
+		if v := strings.TrimSpace(f["rt_api_key"].GetStringValue()); v != "" {
+			p.rtAPIKey = v
+		}
+		if v, ok := f["enable_rt_ratings"]; ok {
+			p.rtEnabled = v.GetBoolValue()
+		}
+	}
 	p.mu.Unlock()
 	return &pluginv1.ConfigureResponse{}, nil
 }
@@ -230,7 +253,17 @@ func (p *Plugin) GetMetadata(ctx context.Context, req *pluginv1.GetMetadataReque
 	if env.Meta.ID == "" {
 		return &pluginv1.GetMetadataResponse{}, nil
 	}
-	return &pluginv1.GetMetadataResponse{Item: toItem(env.Meta, req.GetItemType())}, nil
+	item := toItem(env.Meta, req.GetItemType())
+	rt := p.rottenTomatoesRatings(ctx, env.Meta.Name, req.GetItemType(), year(env.Meta))
+	values := item.GetRatings().AsMap()
+	if rt.Critic != nil {
+		values["rt_critic"] = *rt.Critic
+	}
+	if rt.Audience != nil {
+		values["rt_audience"] = *rt.Audience
+	}
+	item.Ratings, _ = structpb.NewStruct(values)
+	return &pluginv1.GetMetadataResponse{Item: item}, nil
 }
 
 func (p *Plugin) GetImages(ctx context.Context, req *pluginv1.GetImagesRequest) (*pluginv1.GetImagesResponse, error) {
